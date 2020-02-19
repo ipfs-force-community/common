@@ -1,0 +1,60 @@
+syntax = "proto3";
+package common;
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.ServiceOptions {
+  string api_prefix = 50001;
+  string api_version = 50002;
+}
+
+extend google.protobuf.MethodOptions {
+  string grant_scope = 51001;
+  Perm grant_perm = 51002;
+}
+
+extend google.protobuf.FieldOptions {
+  bool field_required = 52001;
+}
+
+// 权限枚举
+enum Perm {
+  // 无权限
+  NONE = 0;
+
+  // 可读
+  READ = 1;  // 0b01
+
+  // 可写
+  WRITE = 2;  // 0b10
+
+  // 可读可写
+  BOTH = 3;  // 0b11
+};
+
+// 空结构
+message Empty {}
+
+message AccessPerms {
+  // 账号 id
+  string account_id = 1;
+
+  // client id
+  string app_id = 2;
+
+  // 权限信息
+  map<string, Perm> perms = 3;
+}
+
+// API 请求结果
+message Result {
+  // 返回码
+  int32 code = 1;
+  // 返回信息
+  string msg = 2;
+}
+
+// 仅包含 API 请求结果的简单 Response
+message SimpleResp {
+  Result res = 1;
+}
